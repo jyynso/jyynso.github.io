@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;700&display=swap');
+
+.container{
+    display: flex;
+
+}
+.normaltext{
+    font-family: "M PLUS Rounded 1c";
+    font-size: 12px;
+    font-weight: 100;
+
+}
+.headertop{
+    font-family:"M PLUS Rounded 1c";
+    font-weight: 100;
+    font-size: 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    color: white;
+    margin: 0 auto;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    background-color: (36, 36, 36, 0.6);
+    backdrop-filter: blur(10px);
+}
+.box{
+    width: 100px;
+    height: 100px;
+    margin: 20px, 20px;
+    background-color: #263b44;
+    border-radius: 20px;
+    margin-top: 100px;
+
+}
+.hoverable {
+    cursor: pointer; /* Changes cursor to pointer to indicate clickability */
+    color: white;    /* Default text color */
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+.hoverable:hover {
+    color: #d43900; /* Change to your desired color */
+}
+.maincontent {
+
+}
