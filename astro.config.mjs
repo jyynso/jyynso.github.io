@@ -5,6 +5,5 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
     // site: 'https://jyynso.github.io',
     site: 'https://jyynso.github.io/ecwt.github.io',
-    base: '/ecwt.github.io/',
     output: 'static',
 });
