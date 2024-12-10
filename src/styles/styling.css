@@ -1,48 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
-.container{
+
+.profile-section {
     display: flex;
-
+    flex-direction: row; 
+    gap: 30px; 
+    padding: 20px; 
 }
-.normaltext{
-    font-family: "M PLUS Rounded 1c";
-    font-size: 12px;
-    font-weight: 100;
-
+.roundedimage {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%; 
+    object-fit: cover; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
-.headertop{
-    font-family:"M PLUS Rounded 1c";
-    font-weight: 100;
-    font-size: 12px;
+.image-section{
+    margin-top: 100px;
+    margin-left: 150px;
+}
+.my-links{
     display: flex;
     flex-direction: row;
-    justify-content: center;
     gap: 20px;
-    color: white;
-    margin: 0 auto;
-    position: fixed;
-    top: 0;
-    z-index: 1000;
-    background-color: (36, 36, 36, 0.6);
-    backdrop-filter: blur(10px);
+    margin-top: 50px;
+    margin-left: 20px;
 }
-.box{
-    width: 100px;
-    height: 100px;
-    margin: 20px, 20px;
-    background-color: #263b44;
-    border-radius: 20px;
-    margin-top: 100px;
-
+.profileinfo{
+    font-family: "Lato";
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #0F0F0F;
+    margin-top: 55px;
+    margin-left: 55px;
+}
+.profileinfo h1{
+    margin: 0;
+}
+.profileinfo p{
+    margin: 0;
+    margin-top: 5px;
 }
 .hoverable {
-    cursor: pointer; /* Changes cursor to pointer to indicate clickability */
-    color: white;    /* Default text color */
-    transition: color 0.3s ease; /* Smooth transition for hover effect */
+    cursor: pointer;
+    color: white;  
+    text-decoration: none;
+    transition: color 0.3s ease; 
 }
 .hoverable:hover {
-    color: #d43900; /* Change to your desired color */
-}
-.maincontent {
-
+    color: #CB4B16;
+    font-weight: 400;
 }
