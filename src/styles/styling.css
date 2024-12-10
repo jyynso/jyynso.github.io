@@ -44,12 +44,10 @@
     margin-top: 5px;
 }
 .hoverable {
-    cursor: pointer;
-    color: white;  
-    text-decoration: none;
-    transition: color 0.3s ease; 
+    cursor: pointer; 
+    transition: color 0.3s ease, transform 0.3s ease; 
 }
 .hoverable:hover {
-    color: #CB4B16;
-    font-weight: 400;
+    fill: #d4aa7d;
+    transform: scale(1.5);
 }
