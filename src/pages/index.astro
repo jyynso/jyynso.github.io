@@ -2,10 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import '../styles/styling.css'
 ---
-
+<script type="module">
+     window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.fade-in').forEach(el => {
+    //   delay here
+      setTimeout(() => el.classList.add('visible'), 80);
+    });
+  });
+</script>
 <Layout>
     <!-- main container  -->
-    <div class="container-main">
+    <div class="container-main fade-in">
         <div class="navigation">
             <div class="nav-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" 
