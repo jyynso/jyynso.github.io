@@ -126,6 +126,12 @@ body {
     font-weight: 400;
     color: var(--paragraph-color);
 }
+.name-head-pv {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 18px;
+    font-weight: 450;
+    color: var(--paragraph-color);
+}
 .about-head {
     display: flex;
     flex-direction: column;
@@ -177,6 +183,9 @@ body {
     .name-head-p {
         font-size: 16px;
         text-align: center;
+    }
+    .name-head-pv {
+        font-size: 18px;
     }
     .container-links {
         padding: 0;
