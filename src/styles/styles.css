@@ -2,20 +2,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
 
-/*simple effects :D :D :D :D:D:D:D:D:Dsdsdadadsa*/
+/* simple fade-in */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
+
 body {
    margin: 0;
    padding: 0;
    background-color: #f9f5d7;
-}	
+}
 h1, p {
     margin: 0;
 }
@@ -38,17 +35,18 @@ p {
     flex-direction: column;
     margin-top: 50px;
     gap: 15px;
-}
-    .sub-cont2-div2 {
-        display:flex;
-        flex-direction: column;
-        margin-top: 20px;
-        gap: 15px;
 
-        opacity: 0;
-		animation: fadeIn 0.3s ease-out 0.3s forwards;
-        /* animation: fadeIn  0.5s forwards; */
-    }
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.4s forwards;
+}
+.sub-cont2-div2 {
+    display:flex;
+    flex-direction: column;
+    margin-top: 20px;
+    gap: 15px;
+}
+
+/* links */
 .links-cont {
 	display: flex;
 	flex-direction: row;
@@ -56,27 +54,27 @@ p {
 	margin: 10px 0 auto 0;
 	
 	opacity: 0;
-	animation: fadeIn 0.5s ease-out 0.5s forwards;
-
+	animation: fadeIn 0.8s ease-out 1.2s forwards;
 }
 .indiv-link {
 	background-color: transparent;
 	cursor: pointer;
 	padding: 5px;
 }
-	.indiv-link:hover {
-		color: #282828;
-		border-radius: 5px;
-		background-color: #f08b89;
-		transition: 0.3s ease;
-	}
-/*for navigation*/
+.indiv-link:hover {
+	color: #282828;
+	border-radius: 5px;
+	background-color: #f08b89;
+	transition: 0.3s ease;
+}
+
+/* navigation */
 .navigation {
     padding-top: 20px;
     padding-bottom: 10px;
 
 	opacity: 0;
-	animation: fadeIn 0.8s ease-out 0.8s forwards;
+	animation: fadeIn 0.8s ease-out 1.6s forwards;
 }
 .nav-bar {
     display: flex;
@@ -92,31 +90,34 @@ p {
     background-color: transparent;
     border-radius: 5px;
 }
-    .nav-bar a {
-        text-decoration: none;
-        color: inherit;
-        padding: 10px;
-        border-radius: 3px;
-        transition: background-color 0.3s ease;
-    }
-    .nav-bar a:hover {
-        background-color: #f08b89;
-        color: #282828;
-    }
-/*picture*/
+.nav-bar a {
+    text-decoration: none;
+    color: inherit;
+    padding: 10px;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+.nav-bar a:hover {
+    background-color: #f08b89;
+    color: #282828;
+}
+
+/* picture */
 .photo-cont {
     max-width: 250px;
-    margin: 30px, 0, 0, auto;
+    margin: 30px 0 0 auto;
     padding: 0;
+
     opacity: 0;
-    animation: fadeIn 0.6s ease-out 0.6s forwards;
+    animation: fadeIn 0.8s ease-out 0.8s forwards;
 }
 .image {
     width: 100%;
     border-radius: 3px;
     margin-top: 19%;
 }
-/*font class*/
+
+/* font classes */
 .t2 {
     font-family: 'Noto Sans Mono', sans-serif;
     font-size: 45px;
@@ -124,8 +125,7 @@ p {
     color: #1d2021;
 
     opacity: 0;
-	animation: fadeIn 0.5s forwards;
-    /* animation: fadeIn 0.3s ease-out 0.3s forwards; */
+    animation: fadeIn 0.8s ease-out 0s forwards;
 }
 .t3 {
     font-family: 'Noto Sans Mono', sans-serif;
@@ -133,6 +133,8 @@ p {
     font-weight: 400;
     color: #504945;
 }
+
+/* responsive */
 @media (max-width: 768px) {
     .main-cont {
         max-width: 90%;
@@ -142,7 +144,6 @@ p {
         padding: 2%;
 		gap: 10px;
 		margin-top: 0;
-		
     }
 	.sub-cont2 {
 		gap: 9px;
@@ -152,7 +153,6 @@ p {
         width: 90%;
         max-width: 300px;
         margin: 0 auto 20px auto;
-		
         flex-basis: auto;
     }
 	.image {
