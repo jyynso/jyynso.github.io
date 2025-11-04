@@ -94,6 +94,7 @@ p {
     text-decoration: none;
     color: inherit;
     padding: 10px;
+    font-weight: 800;
     border-radius: 3px;
     transition: background-color 0.3s ease;
 }
@@ -171,5 +172,8 @@ p {
     }
     .links-cont {
 		justify-content: center;
+        padding-top: 10px;
+        padding-bottom: 20px;
 	}
+
 }
