@@ -1,8 +1,7 @@
-/*adding my fonts*/
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
 
-/* simple fadeni ahahsdhsjhaohfd ajggs  :D :D :D  */
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -19,20 +18,24 @@ h1, p {
 p {
     margin-left: 7px;
 }
-.main-cont {
+.content {
     display: flex;
     flex-direction: column;
+    align-items: center;
     margin: 0 auto;
+    width: 100%;
     max-width: 60%;
 }
 .sub-cont {
     display: flex;
     flex-direction: row;
     gap: 10%;
+    width: 100%;
+    justify-content: center;
+    align-self: center;
 }
 .sub-cont2 {
     display: flex;
-    flex-direction: column;
     margin-top: 50px;
     gap: 15px;
 }
@@ -46,7 +49,7 @@ p {
     animation: fadeIn 0.8s ease-out 0.4s forwards;
 }
 
-/* links */
+
 .links-cont {
 	display: flex;
 	flex-direction: row;
@@ -68,10 +71,12 @@ p {
 	background-color: #f08b89;
 }
 
-/* navigation */
+
 .navigation {
     padding-top: 20px;
     padding-bottom: 10px;
+    width: 100%;
+    align-self: flex-start;
 
 	opacity: 0;
 	animation: fadeIn 0.3s ease-out 0.3s forwards;
@@ -86,7 +91,8 @@ p {
     font-size: 15.5px;
     color: #504945;
     margin: 0;
-    padding: 1%;
+    padding: 0;
+    padding-left: 0;
     background-color: transparent;
     border-radius: 5px;
 }
@@ -106,7 +112,7 @@ p {
 /* picture */
 .photo-cont {
     max-width: 250px;
-    margin: 30px 0 0 auto;
+    margin: 0 0 0 auto;
     padding: 0;
 
     opacity: 0;
@@ -137,7 +143,7 @@ p {
 
 /* responsive */
 @media (max-width: 768px) {
-    .main-cont {
+    .content {
         max-width: 90%;
     }
     .sub-cont {
@@ -145,19 +151,26 @@ p {
         padding: 2%;
 		gap: 10px;
 		margin-top: 0;
+        align-items: center;
     }
 	.sub-cont2 {
 		gap: 9px;
 		margin-top: 0;
+        width: 100%;
+        flex-direction: column-reverse;
+        align-items: center;
+
 	}
     .photo-cont {
-        width: 90%;
+        width: 80%;
         max-width: 300px;
         margin: 0 auto 20px auto;
         flex-basis: auto;
     }
 	.image {
 		margin-top: 10px;
+        width: 100%;
+        height: auto;
 	}
 	.sub-cont2-div2 {
 		margin-top: 10px;
@@ -166,14 +179,17 @@ p {
 		margin-right: auto;
 	}
     .t2 {
-        font-size: 30px;
+        font-size: 25px;
         text-align: center;
 		padding-top: 10px;
+    }
+    .t3 {
+        font-size: 15px;
     }
     .links-cont {
 		justify-content: center;
         padding-top: 10px;
         padding-bottom: 20px;
 	}
-
 }
+
