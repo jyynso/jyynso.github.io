@@ -1,0 +1,24 @@
+---
+interface Props {
+  label: string;
+  svgPaths: string[];
+}
+
+const { label, svgPaths } = Astro.props;
+---
+
+<div class="flex flex-row items-center gap-2 my-2">
+  <h3 class="text-sm font-mono">{label}</h3>
+  {
+    svgPaths.map((svgPath) => (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="30"
+        height="30"
+        class="fill-muted"
+        viewBox="0 0 256 256"
+        set:html={svgPath}
+      />
+    ))
+  }
+</div>
