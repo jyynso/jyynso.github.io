@@ -27,7 +27,6 @@ html::-webkit-scrollbar {
   --color-button-bg: var(--button-bg);
   --color-button-border: var(--button-border);
 
-  --font-rodin: 'newRodinPro', sans-serif;
   --font-mono: 'Noto Sans Mono', sans-serif;
   --font-mukta: 'Mukta', sans-serif;
 

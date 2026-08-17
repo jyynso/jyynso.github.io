@@ -20,8 +20,8 @@ const { label, svgPaths } = Astro.props;
       svgPaths.map(({ path, viewBox = "0 0 256 256", type = "fill" }) => (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="30"
-          height="30"
+          width="25"
+          height="25"
           class={type === "stroke" ? "stroke-muted fill-none" : "fill-muted"}
           stroke-width={type === "stroke" ? "2" : undefined}
           stroke-linecap={type === "stroke" ? "round" : undefined}
