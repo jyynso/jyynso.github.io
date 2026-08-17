@@ -4,20 +4,22 @@ import Project from "./Project.astro";
 const projects = [
   {
     title: "Lateli",
-    tags: ["React", "NodeJS"],
+    tags: ["React", "Node.js", "TailwindCSS", "MySQL"],
     description:
-      "An art marketplace where users can upload, browse, and buy artwork",
+      "An art marketplace",
+    link: "https://github.com/jyynso/lateli",
   },
   {
     title: "Lchsr",
-    tags: ["Go", "NodeJS"],
+    tags: ["Go", "ffmpeg", "JavaScript", "CSS"],
     description:
-      "A simple local LAN file server. Run in any folder and browse its contents from any device on the same network.",
+      "A simple local file server",
+    link: "https://github.com/jyynso/lcshr",
   },
 ];
 ---
 
-<div class="my-2 max-w-sm md:max-w-xl">
+<div class="my-2 w-sm md:w-xl">
   <h2 class="text-xl text-right font-semibold font-mukta">Projects</h2>
   {projects.map((project) => <Project {...project} />)}
 </div>
