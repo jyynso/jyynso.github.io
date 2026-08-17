@@ -80,8 +80,8 @@ window.addEventListener('DOMContentLoaded', () => {
   applyTheme(initialTheme);
 
   if (toggle) {
-    toggle.style.left = '24px';
-    toggle.style.top = '24px';
+    // toggle.style.left = '24px';
+    // toggle.style.top = '24px';
 
     toggle.addEventListener('pointerdown', (event) => {
       event.preventDefault();
