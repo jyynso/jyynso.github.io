@@ -1,0 +1,19 @@
+---
+interface Props {
+  title: string;
+  tags: string[];
+  description: string;
+}
+
+const { title, tags, description } = Astro.props;
+---
+
+<div class="my-4">
+  <div class="flex flex-row justify-between">
+    <h3 class="text-xl font-semibold font-mukta">{title}</h3>
+    <div class="flex flex-row gap-2 font-mono">
+      {tags.map((tag) => <p class="text-sm text-muted">{tag}</p>)}
+    </div>
+  </div>
+  <p class="text-sm md:text-base font-mono">{description}</p>
+</div>

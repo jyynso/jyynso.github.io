@@ -1,1 +1,23 @@
-wala pang laman hehe :D
+---
+import Project from "./Project.astro";
+
+const projects = [
+  {
+    title: "Lateli",
+    tags: ["React", "NodeJS"],
+    description:
+      "An art marketplace where users can upload, browse, and buy artwork",
+  },
+  {
+    title: "Lchsr",
+    tags: ["Go", "NodeJS"],
+    description:
+      "A simple local LAN file server. Run in any folder and browse its contents from any device on the same network.",
+  },
+];
+---
+
+<div class="my-2 max-w-sm md:max-w-xl">
+  <h2 class="text-xl text-right font-semibold font-mukta">Projects</h2>
+  {projects.map((project) => <Project {...project} />)}
+</div>
