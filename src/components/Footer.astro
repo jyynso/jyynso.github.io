@@ -1,3 +1,43 @@
-<div class="mt-auto py-4 w-xs md:w-xl">
-  <p class="text-sm font-mono">© 2025 | Jobert Ecawat</p>
+---
+import Seperator from "./Seperator.astro";
+---
+
+<div class="mt-auto py-4 w-xs md:w-xl opacity-0 animate-fadeIn [animation-delay:1s]">
+  <Seperator class="mb-2 md:mb-6"/>
+  <div class="flex flex-col-reverse gap-4 md:flex-row justify-between">
+    <p class="text-xs font-mono text-right">2025 | Jobert Ecawat</p>
+    <div id="now-playing" class="font-mono flex items-center gap-2 text-xs text-muted">
+      Loading...
+    </div>
+  </div>
 </div>
+
+<script>
+  fetch("https://spot-api-orcin.vercel.app/api/nowPlaying")
+    .then(res => res.json())
+    .then(data => {
+      const el = document.getElementById("now-playing");
+      if (!el) return;
+
+      if (data.isPlaying) {
+        el.innerHTML = `
+          <img src="${data.albumArt}" alt="" class="w-6 h-6 rounded-sm" />
+          <a href="${data.songUrl}" target="_blank" rel="noopener noreferrer" class="hover:text-text transition-colors">
+            ♪ ${data.title} ⁃ ${data.artist}
+          </a>
+        `;
+      } else {
+        el.innerHTML = `
+          <svg 
+            width="16" 
+            height="16" 
+            class="fill-text"
+            viewBox="0 0 256 256"><path d="M201.89,54.66A103.43,103.43,0,0,0,128.79,24H128A104,104,0,0,0,24,128v56a24,24,0,0,0,24,24H64a24,24,0,0,0,24-24V144a24,24,0,0,0-24-24H40.36A88,88,0,0,1,128,40h.67a87.71,87.71,0,0,1,87,80H192a24,24,0,0,0-24,24v40a24,24,0,0,0,24,24h16a24,24,0,0,0,24-24V128A103.41,103.41,0,0,0,201.89,54.66ZM64,136a8,8,0,0,1,8,8v40a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V136Zm152,48a8,8,0,0,1-8,8H192a8,8,0,0,1-8-8V144a8,8,0,0,1,8-8h24Z"></path>
+          </svg>`;
+      }
+    })
+    .catch(() => {
+      const el = document.getElementById("now-playing");
+      if (el) el.textContent = "";
+    });
+</script>
