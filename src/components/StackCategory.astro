@@ -3,6 +3,7 @@ interface Icon {
   path: string;
   viewBox?: string;
   type?: "fill" | "stroke";
+  name: string;
 }
 
 interface Props {
@@ -17,18 +18,23 @@ const { label, svgPaths } = Astro.props;
   <h3 class="text-sm font-mono">{label}</h3>
   <div class="flex flex-row items-center gap-4 my-2">
     {
-      svgPaths.map(({ path, viewBox = "0 0 256 256", type = "fill" }) => (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="25"
-          class={type === "stroke" ? "stroke-muted fill-none" : "fill-muted"}
-          stroke-width={type === "stroke" ? "2" : undefined}
-          stroke-linecap={type === "stroke" ? "round" : undefined}
-          stroke-linejoin={type === "stroke" ? "round" : undefined}
-          viewBox={viewBox}
-          set:html={path}
-        />
+      svgPaths.map(({ path, viewBox = "0 0 256 256", type = "fill", name }) => (
+        <div class="group relative shrink-0">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            class={`transition-all duration-200 hover:-translate-y-0.5 ${type === "stroke" ? "stroke-muted fill-none" : "fill-muted"}`}
+            stroke-width={type === "stroke" ? "2" : undefined}
+            stroke-linecap={type === "stroke" ? "round" : undefined}
+            stroke-linejoin={type === "stroke" ? "round" : undefined}
+            viewBox={viewBox}
+            set:html={path}
+          />
+          <span class="font-semibold pointer-events-none absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded px-2 py-1 text-xs text-background opacity-0 transition-opacity duration-150 group-hover:opacity-100">
+            {name}
+          </span>
+        </div>
       ))
     }
   </div>
