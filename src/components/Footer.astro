@@ -4,9 +4,9 @@ import Seperator from "./Seperator.astro";
 
 <div class="mt-auto py-4 w-xs md:w-xl opacity-0 animate-fadeIn [animation-delay:1s]">
   <Seperator class="mb-2 md:mb-6"/>
-  <div class="flex flex-col-reverse gap-4 md:flex-row justify-between">
+  <div class="flex flex-col-reverse gap-4 md:flex-row md:items-center justify-between">
     <p class="text-xs font-mono text-right">2025 | Jobert Ecawat</p>
-    <div id="now-playing" class="font-mono flex items-center gap-2 text-xs text-muted">
+    <div id="now-playing" class="font-mono max-w-90 items-center gap-2 text-xs text-muted">
       <svg 
         width="16" 
         height="16" 
@@ -26,8 +26,8 @@ import Seperator from "./Seperator.astro";
 
       if (data.isPlaying) {
         el.innerHTML = `
-          <img src="${data.albumArt}" alt="" class="w-6 h-6 rounded-sm" />
-          <a href="${data.songUrl}" target="_blank" rel="noopener noreferrer" class="hover:text-text transition-colors">
+          <a href="${data.songUrl}" target="_blank" rel="noopener noreferrer" class="flex flex-row items-center gap-2 hover:text-accent transition-colors">
+            <img src="${data.albumArt}" alt="" class="w-6 h-6 rounded-sm" />
             ♪ ${data.title} ⁃ ${data.artist}
           </a>
         `;
