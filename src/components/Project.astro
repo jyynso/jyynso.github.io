@@ -1,4 +1,6 @@
 ---
+import Tooltip from './Tooltip.astro';
+
 interface Props {
   title: string;
   tags: string[];
@@ -9,16 +11,18 @@ interface Props {
 const { title, tags, description, link } = Astro.props;
 ---
 
-<a href={link} target="_blank" class="group block">
-  <div class="my-4 p-2 -m-2 rounded transition-all duration-200 group-hover:text-accent group-hover:-translate-y-0.5 ">
-    <div class="flex flex-row justify-between items-center">
-      <h3 class="text-lg font-semibold font-mukta">
-        {title}
-      </h3>
-      <div class="flex flex-row gap-2 font-mono group-hover:text-accent">
-        {tags.map((tag) => <p class="text-xs font-semibold">{tag}</p>)}
+<a href={link} target="_blank" class="block">
+  <Tooltip text="go to repo" position="top">
+    <div class="my-4 p-2 -m-2 rounded transition-all duration-200 hover:text-accent hover:-translate-y-0.5">
+      <div class="flex flex-row justify-between items-center">
+        <h3 class="text-lg font-semibold font-mukta">
+          {title}
+        </h3>
+        <div class="flex flex-row gap-2 font-mono">
+          {tags.map((tag) => <p class="text-xs font-semibold">{tag}</p>)}
+        </div>
       </div>
+      <p class="text-sm font-mono">{description}</p>
     </div>
-    <p class="text-sm font-mono">{description}</p>
-  </div>
+  </Tooltip>
 </a>

@@ -1,0 +1,69 @@
+---
+interface Props {
+  text: string;
+  position?: "top" | "bottom" | "left" | "right";
+}
+const { text, position = "top" } = Astro.props;
+
+const positionClasses: Record<string, string> = {
+  top: "bottom-full left-1/2 -translate-x-1/2 -translate-y-1.5",
+  bottom: "top-full left-1/2 -translate-x-1/2 translate-y-1.5",
+  left: "right-full top-1/2 -translate-y-1/2 -translate-x-1.5",
+  right: "left-full top-1/2 -translate-y-1/2 translate-x-1.5",
+};
+---
+
+<div class="group relative" data-tooltip-trigger>
+  <slot />
+  <span
+    role="tooltip"
+    data-tooltip-content
+    class:list={[
+      "absolute z-50 whitespace-nowrap px-2.5 py-1",
+      "font-mono text-[10px] font-semibold tracking-[0.08em] text-text",
+      "pointer-events-none opacity-0 scale-95",
+      "transition-all duration-200 ease-out",
+      "group-hover:opacity-100 group-hover:scale-100",
+      "group-focus-within:opacity-100 group-focus-within:scale-100",
+      positionClasses[position],
+    ]}>
+    {text}
+  </span>
+</div>
+
+<script>
+  const suppressTooltips = () => {
+    document.querySelectorAll<HTMLElement>('[data-tooltip-content]').forEach((tooltip) => {
+      tooltip.dataset.suppressed = 'true';
+      tooltip.style.setProperty('opacity', '0', 'important');
+    });
+  };
+
+  const restoreTooltip = (tooltip: HTMLElement) => {
+    delete tooltip.dataset.suppressed;
+    tooltip.style.removeProperty('opacity');
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-tooltip-trigger]').forEach((trigger) => {
+    const tooltip = trigger.querySelector<HTMLElement>('[data-tooltip-content]');
+    if (!tooltip) return;
+
+    trigger.addEventListener('pointerenter', () => restoreTooltip(tooltip));
+
+    trigger.addEventListener('pointermove', (event) => {
+      restoreTooltip(tooltip);
+
+      const bounds = trigger.getBoundingClientRect();
+      tooltip.style.left = `${event.clientX - bounds.left + 14}px`;
+      tooltip.style.top = `${event.clientY - bounds.top + 14}px`;
+      tooltip.style.transform = 'none';
+    });
+
+    trigger.addEventListener('pointerleave', () => suppressTooltips());
+  });
+
+  window.addEventListener('blur', suppressTooltips);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) suppressTooltips();
+  });
+</script>
