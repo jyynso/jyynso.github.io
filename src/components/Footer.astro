@@ -28,7 +28,7 @@ import Seperator from "./Seperator.astro";
         el.innerHTML = `
           <a href="${data.songUrl}" target="_blank" rel="noopener noreferrer" class="flex flex-row items-center gap-2 hover:text-accent transition-colors">
             <img src="${data.albumArt}" alt="" class="w-6 h-6 rounded-sm" />
-            ♪ ${data.title} ⁃ ${data.artist}
+            ♪ <span class="font-semibold">${data.title}</span> ⁃ ${data.artist}
           </a>
         `;
       } else {
