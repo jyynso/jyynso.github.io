@@ -2,13 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
-html {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+html, body {
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 html::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
 
 @font-face {
@@ -71,7 +73,7 @@ body {
   box-sizing: border-box;
 }
 
-.theme-toggle.dragging {
+#theme-toggle.dragging {
   cursor: grabbing;
   transform: scale(1.04);
 }
