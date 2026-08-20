@@ -37,13 +37,13 @@ const { text } = Astro.props;
 
   const targets = new Map<HTMLElement, { x: number; y: number }>();
   const current = new Map<HTMLElement, { x: number; y: number }>();
-  const LERP_FACTOR = 0.2; 
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
   const tick = () => {
     targets.forEach((target, tooltip) => {
       const cur = current.get(tooltip)!;
-      cur.x += (target.x - cur.x) * LERP_FACTOR;
-      cur.y += (target.y - cur.y) * LERP_FACTOR;
+      cur.x = lerp(cur.x, target.x, 0.1);
+      cur.y = lerp(cur.y, target.y, 0.1);
       tooltip.style.left = `${cur.x}px`;
       tooltip.style.top = `${cur.y}px`;
     });
@@ -51,11 +51,19 @@ const { text } = Astro.props;
   };
   requestAnimationFrame(tick);
 
+  const dismissed = new WeakSet<HTMLElement>();
+
   document.querySelectorAll<HTMLElement>('[data-tooltip-trigger]').forEach((trigger) => {
     const tooltip = trigger.querySelector<HTMLElement>('[data-tooltip-content]');
     if (!tooltip) return;
 
     tooltip.style.transform = 'none';
+
+    const dismiss = () => {
+      if (dismissed.has(trigger)) return;
+      dismissed.add(trigger);
+      suppressTooltips();
+    }
 
     trigger.addEventListener('pointerenter', (event) => {
       restoreTooltip(tooltip);
@@ -78,6 +86,8 @@ const { text } = Astro.props;
     });
 
     trigger.addEventListener('pointerleave', () => suppressTooltips());
+    trigger.addEventListener('click', dismiss);
+    trigger.addEventListener('focus', dismiss);
   });
 
   window.addEventListener('blur', suppressTooltips);
