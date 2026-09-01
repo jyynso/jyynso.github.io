@@ -3,13 +3,6 @@ import Project from "./Project.astro";
 
 const projects = [
   {
-    title: "Lateli",
-    tags: ["React", "Node.js", "TailwindCSS", "MySQL"],
-    description:
-      "An art marketplace",
-    link: "https://github.com/jyynso/lateli",
-  },
-  {
     title: "Lchsr",
     tags: ["Go", "ffmpeg", "JavaScript", "CSS"],
     description:
@@ -20,6 +13,6 @@ const projects = [
 ---
 
 <div class="w-xs mb-26 md:w-xl opacity-0 animate-fadeIn [animation-delay:0.7s]">
-  <h2 class="text-xl text-right font-semibold font-mukta">Projects</h2>
+  <h2 class="text-xl text-right font-semibold font-mukta">Project</h2>
   {projects.map((project) => <Project {...project} />)}
 </div>
