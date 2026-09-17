@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
 html, body {
@@ -13,24 +13,19 @@ html::-webkit-scrollbar {
   display: none;
 }
 
-@font-face {
-  font-family: 'newRodinPro';
-  src: url('/newRodinPro.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-}
-
 @theme {
   --color-bg: var(--bg);
   --color-text: var(--text);
   --color-svgHover: var(--svgHover);
   --color-muted: var(--muted);
+	--color-xtraMuted: var(--extraMuted);
   --color-accent: var(--accent);
   --color-button-bg: var(--button-bg);
   --color-button-border: var(--button-border);
 
-  --font-mono: 'Noto Sans Mono', sans-serif;
-  --font-mukta: 'Mukta', sans-serif;
+	--font-archivo: 'Archivo', sans-serif;
+	--font-plexMono: 'IBM Plex Mono', sans-serif;
+	--font-atkinson: 'Atkinson Hyperlegible', sans-serif;
 
   --animate-fadeIn: fadeIn 0.4s ease-out forwards;
 
@@ -41,10 +36,11 @@ html::-webkit-scrollbar {
 }
 
 :root {
-  --bg: #f9f5d7;
+  --bg: white;
   --text: #282828;
   --svgHover: #1b1b1b;
   --muted: #504945;
+	--extraMuted: #7a7775;;
   --accent: #f08b89;
   --button-bg: rgba(255, 255, 255, 0.75);
   --button-border: rgba(0, 0, 0, 0.08);

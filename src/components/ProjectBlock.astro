@@ -1,5 +1,6 @@
 ---
 import Tooltip from './Tooltip.astro';
+import Seperator from './Seperator.astro';
 
 interface Props {
   title: string;
@@ -15,14 +16,15 @@ const { title, tags, description, link } = Astro.props;
   <Tooltip text="go to repo">
     <div class="my-4 p-2 -m-2 rounded transition-all duration-200 hover:text-accent hover:-translate-y-0.5">
       <div class="flex flex-row justify-between items-center">
-        <h3 class="text-lg font-semibold font-mukta">
+        <h3 class="font-archivo text-base font-semibold">
           {title}
         </h3>
-        <div class="flex flex-row gap-2 font-mono">
-          {tags.map((tag) => <p class="text-xs font-semibold">{tag}</p>)}
+				<Seperator class="mb-2 md:mb-4"/>
+        <div class="flex flex-row gap-2">
+          {tags.map((tag) => <p class="font-plexMono text-xs font-semibold text-xtraMuted">{tag}</p>)}
         </div>
       </div>
-      <p class="text-sm font-mono">{description}</p>
+      <p class="font-atkinson text-base text-muted">{description}</p>
     </div>
   </Tooltip>
 </a>
