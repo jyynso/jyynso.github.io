@@ -40,7 +40,7 @@ html::-webkit-scrollbar {
   --text: #282828;
   --svgHover: #1b1b1b;
   --muted: #504945;
-	--extraMuted: #7a7775;;
+  --extraMuted: #7a7775;
   --accent: #f08b89;
   --button-bg: rgba(255, 255, 255, 0.75);
   --button-border: rgba(0, 0, 0, 0.08);
@@ -51,6 +51,7 @@ html::-webkit-scrollbar {
   --text: #f7f0df;
   --svgHover: #f0e4e4;
   --muted: #d8d0c0;
+  --extraMuted: #9b9488;
   --accent: #ff8b80;
   --button-bg: rgba(255, 255, 255, 0.12);
   --button-border: rgba(255, 255, 255, 0.12);

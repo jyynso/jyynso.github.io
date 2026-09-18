@@ -5,22 +5,21 @@ interface Props {
   href: string;
   title: string;
   svgPath: string;
+	viewBox?: string;
 }
 
-const { href, title, svgPath } = Astro.props;
+const { href, title, svgPath, viewBox = "0 0 256 256" } = Astro.props;
 ---
 <Tooltip text={title}>
   <div
-    class="bg-transparent cursor-pointer px-1.5 py-1.5 rounded-lg transition-all duration-200 select-none hover:bg-[color-mix(in_srgb,var(--accent)_40%,transparent)] hover:-translate-y-0.5"
-    draggable="true"
-  >
+    class="bg-transparent cursor-pointer px-2 transition-all duration-200 hover:-translate-y-0.5">
     <a href={href} target="_blank">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="30"
-        height="30"
-        class="fill-muted"
-        viewBox="0 0 256 256"
+        width="26"
+        height="26"
+        class="fill-muted hover:fill-accent"
+        viewBox={viewBox}
         set:html={svgPath}
       />
     </a>
