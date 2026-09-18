@@ -1,11 +1,12 @@
 ---
 interface Props {
   class?: string;
+	lineStyle?: string;
 }
 
-const { class: className = "" } = Astro.props;
+const { class: className = "", lineStyle = "" } = Astro.props;
 ---
 
-<div class={`w-xs md:w-xl ${className}`}>
-	<div class="w-xs md:w-xl border-t-2 border-xtraMuted/25" />
+<div class={`md:w-xl w-sm ${className}`}>
+	<div class={`md:w-xl w-sm border-t-2 border-xtraMuted/25 ${lineStyle}`} />
 </div>
