@@ -52,10 +52,10 @@ const docker: Icon = {
 const stack: Icon[] = [cs, ts, react, dotnet, astro, tw, git, docker];
 ---
 
-<div class="md:w-xl w-sm px-2 md:px-0 opacity-0 animate-fadeIn [animation-delay:0.85s]">
+<div class="md:w-xl w-sm px-6 md:px-0 opacity-0 animate-fadeIn [animation-delay:0.85s]">
   <h2 class="text-base font-semibold font-archivo text-muted">Stack</h2>
 	<Seperator class="my-2"/>
-  <div class="flex gap-6">
+  <div class="flex flex-wrap gap-6">
     {stack.map(({ path, name, viewBox = "0 0 256 256" }) => (
 			<Tooltip text={name}>
 				<svg

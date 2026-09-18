@@ -20,13 +20,13 @@ const pssic: Comp = {
 
 const companyList: Comp[] = [pssic];
 ---
-<div class="md:w-xl w-sm px-2 md:px-0 opacity-0 animate-fadeIn [animation-delay:0.7s]">
+<div class="md:w-xl w-sm px-6 md:px-0 opacity-0 animate-fadeIn [animation-delay:0.7s]">
   <h2 class="font-archivo text-base font-semibold">Work</h2> 
 	<Seperator class="my-2 md:mb-4"/>
 	{companyList.map(({ link, name, role, startDate, endDate }) => (
 		<a href={link} target="_blank" class="block">
 			<Tooltip text="visit site">
-				<div class="flex flex-row justify-between text-center transition-all duration-200 group hover:-translate-y-0.5">
+				<div class="flex flex-row justify-between items-center transition-all duration-200 group hover:-translate-y-0.5">
 					<div class="flex flex-row text-center gap-2">
 						<h3 class="font-atkinson font-semibold text-muted group-hover:text-accent transition-colors duration-200">{role}</h3>
 						<span class="font-atkinson text-xtraMuted group-hover:text-accent transition-colors duration-200">@ {name}</span>
