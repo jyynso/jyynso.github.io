@@ -13,6 +13,10 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+::selection {
+  background-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
 @theme {
   --color-bg: var(--bg);
   --color-text: var(--text);
