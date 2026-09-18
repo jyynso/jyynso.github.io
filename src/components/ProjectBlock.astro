@@ -7,13 +7,20 @@ const projects = [
     title: "Lchsr",
     tags: ["Go", "ffmpeg", "JavaScript", "CSS"],
     description:
-      "A simple local file server",
+      "A simple local file server.",
     link: "https://github.com/jyynso/lcshr",
+  },
+  {
+    title: "Eikonix",
+    tags: ["C#", "ASP.NET MVC", "EF6", "MySQL"],
+    description:
+      "A web-based artwork e-commerce platform.",
+    link: "https://github.com/jyynso/Eikonix",
   },
 ];
 ---
 
-<div class="md:w-xl w-sm px-2 md:px-0 opacity-0 animate-fadeIn [animation-delay:0.8s]">
+<div class="md:w-xl w-sm px-6 md:px-0 opacity-0 animate-fadeIn [animation-delay:0.8s]">
   <h2 class="font-archivo text-base font-semibold">Project</h2> 
 	<Seperator class="my-2 md:mb-4"/>
   {projects.map((project) => <Project {...project} />)}
