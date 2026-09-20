@@ -7,91 +7,158 @@ const { text } = Astro.props;
 
 <div class="group relative" data-tooltip-trigger>
   <slot />
-  <span
-    role="tooltip"
-    data-tooltip-content
-    class:list={[
-      "absolute z-50 whitespace-nowrap px-2.5 py-1",
-      "font-plexMono text-[10px] font-semibold tracking-[0.08em] text-text",
-      "pointer-events-none opacity-0 scale-95",
-      "transition-[opacity,transform] duration-200 ease-out",
-      "group-hover:opacity-100 group-hover:scale-100",
-      "group-focus-within:opacity-100 group-focus-within:scale-100",
-    ]}>
-    {text}
-  </span>
+	<span
+		role="tooltip"
+		data-tooltip-content
+		class:list={[
+			"absolute top-0 left-0 z-50 whitespace-nowrap px-2.5 py-1",
+			"font-plexMono text-[10px] font-semibold tracking-[0.1em] text-text/90",
+			"pointer-events-none opacity-0 blur-[2px]",
+			"[text-shadow:0_1px_3px_rgba(0,0,0,0.4)]",
+			"transition-[opacity,filter] duration-300 ease-out",
+			"group-hover:opacity-100 group-hover:blur-none",
+			"group-focus-within:opacity-100 group-focus-within:blur-none",
+		]}>
+		{text}
+	</span>
 </div>
 
 <script>
-  const suppressTooltips = () => {
-    document.querySelectorAll<HTMLElement>('[data-tooltip-content]').forEach((tooltip) => {
-      tooltip.dataset.suppressed = 'true';
-      tooltip.style.setProperty('opacity', '0', 'important');
-    });
-  };
+	const forceHide = (tooltip: HTMLElement) => {
+		tooltip.style.setProperty('opacity', '0', 'important');
+		tooltip.style.setProperty('filter', 'blur(2px)', 'important');
+	};
 
-  const restoreTooltip = (tooltip: HTMLElement) => {
-    delete tooltip.dataset.suppressed;
-    tooltip.style.removeProperty('opacity');
-  };
+	const forceShow = (tooltip: HTMLElement) => {
+		tooltip.style.setProperty('opacity', '1', 'important');
+		tooltip.style.setProperty('filter', 'blur(0px)', 'important');
+	};
 
-  const targets = new Map<HTMLElement, { x: number; y: number }>();
-  const current = new Map<HTMLElement, { x: number; y: number }>();
-  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+	const clearForce = (tooltip: HTMLElement) => {
+		tooltip.style.removeProperty('opacity');
+		tooltip.style.removeProperty('filter');
+	};
+	const targets = new Map<HTMLElement, { x: number; y: number }>();
+	const current = new Map<HTMLElement, { x: number; y: number }>();
+	const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-  const tick = () => {
-    targets.forEach((target, tooltip) => {
-      const cur = current.get(tooltip)!;
-      cur.x = lerp(cur.x, target.x, 0.1);
-      cur.y = lerp(cur.y, target.y, 0.1);
-      tooltip.style.left = `${cur.x}px`;
-      tooltip.style.top = `${cur.y}px`;
-    });
-    requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
+	let running = false;
 
-  const dismissed = new WeakSet<HTMLElement>();
+	const tick = () => {
+			let stillMoving = false;
 
-  document.querySelectorAll<HTMLElement>('[data-tooltip-trigger]').forEach((trigger) => {
-    const tooltip = trigger.querySelector<HTMLElement>('[data-tooltip-content]');
-    if (!tooltip) return;
+			targets.forEach((target, tooltip) => {
+					const cur = current.get(tooltip)!;
+					cur.x = lerp(cur.x, target.x, 0.1);
+					cur.y = lerp(cur.y, target.y, 0.1);
 
-    tooltip.style.transform = 'none';
+					if (Math.abs(target.x - cur.x) > 0.01 || Math.abs(target.y - cur.y) > 0.01) {
+							stillMoving = true;
+					}
 
-    const dismiss = () => {
-      if (dismissed.has(trigger)) return;
-      dismissed.add(trigger);
-      suppressTooltips();
-    }
+					tooltip.style.transform = `translate3d(${cur.x}px, ${cur.y}px, 0) translate(-50%, 0)`;
+			});
 
-    trigger.addEventListener('pointerenter', (event) => {
-      restoreTooltip(tooltip);
-      const bounds = trigger.getBoundingClientRect();
-      const pos = {
-        x: event.clientX - bounds.left + 14,
-        y: event.clientY - bounds.top + 14,
-      };
-      targets.set(tooltip, pos);
-      current.set(tooltip, { ...pos });
-    });
+			if (stillMoving) {
+					requestAnimationFrame(tick);
+			} else {
+					running = false;
+			}
+	};
 
-    trigger.addEventListener('pointermove', (event) => {
-      restoreTooltip(tooltip);
-      const bounds = trigger.getBoundingClientRect();
-      targets.set(tooltip, {
-        x: event.clientX - bounds.left + 14,
-        y: event.clientY - bounds.top + 14,
-      });
-    });
+	const startLoop = () => {
+		if (!running) {
+			running = true;
+			requestAnimationFrame(tick);
+		}
+	};
 
-    trigger.addEventListener('pointerleave', () => suppressTooltips());
-    trigger.addEventListener('click', dismiss);
-    trigger.addEventListener('focus', dismiss);
-  });
+	const pinned = new Set<HTMLElement>();
 
-  window.addEventListener('blur', suppressTooltips);
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) suppressTooltips();
-  });
+	document.querySelectorAll<HTMLElement>('[data-tooltip-trigger]').forEach((trigger) => {
+		const tooltip = trigger.querySelector<HTMLElement>('[data-tooltip-content]');
+		if (!tooltip) return;
+			
+		tooltip.style.transform = `translate3d(0px, 0px, 0) translate(-50%, 0)`;
+
+		trigger.addEventListener('pointerenter', (event) => {
+			if (event.pointerType === 'touch') return;
+			clearForce(tooltip);
+			const bounds = trigger.getBoundingClientRect();
+			const pos = {
+				x: event.clientX - bounds.left,
+				y: event.clientY - bounds.top + 12,
+			};
+			targets.set(tooltip, pos);
+			current.set(tooltip, { ...pos });
+			startLoop();
+		});
+
+		trigger.addEventListener('pointermove', (event) => {
+			if (event.pointerType === 'touch') return;
+			clearForce(tooltip);
+			const bounds = trigger.getBoundingClientRect();
+			targets.set(tooltip, {
+				x: event.clientX - bounds.left,
+				y: event.clientY - bounds.top + 12,
+			});
+			startLoop();
+		});
+
+		trigger.addEventListener('pointerleave', (event) => {
+			if (event.pointerType === 'touch') return;
+			if (!pinned.has(trigger)) forceHide(tooltip);
+		});
+
+		trigger.addEventListener('click', (event) => {
+			if (pinned.has(trigger)) {
+				pinned.delete(trigger);
+				forceHide(tooltip);
+				return;
+			}
+
+			pinned.forEach((t) => {
+				const otherTooltip = t.querySelector<HTMLElement>('[data-tooltip-content]');
+				if (otherTooltip) forceHide(otherTooltip);
+			});
+			pinned.clear();
+
+			pinned.add(trigger);
+			const bounds = trigger.getBoundingClientRect();
+			const pos = {
+				x: (event as MouseEvent).clientX - bounds.left,
+				y: (event as MouseEvent).clientY - bounds.top + 12,
+			};
+			targets.set(tooltip, pos);
+			current.set(tooltip, { ...pos });
+			forceShow(tooltip);
+			event.stopPropagation();
+		});
+
+		trigger.addEventListener('focus', () => {
+			if (!pinned.has(trigger)) clearForce(tooltip);
+		});
+	});
+
+	document.addEventListener('click', () => {
+		if (pinned.size) {
+			pinned.forEach((t) => {
+				const tooltip = t.querySelector<HTMLElement>('[data-tooltip-content]');
+				if (tooltip) forceHide(tooltip);
+			});
+			pinned.clear();
+		}
+	});
+
+	window.addEventListener('blur', () => {
+		pinned.clear();
+		document.querySelectorAll<HTMLElement>('[data-tooltip-content]').forEach(forceHide);
+	});
+
+	document.addEventListener('visibilitychange', () => {
+		if (document.hidden) {
+			pinned.clear();
+			document.querySelectorAll<HTMLElement>('[data-tooltip-content]').forEach(forceHide);
+		}
+	});
 </script>
