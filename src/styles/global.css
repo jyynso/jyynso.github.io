@@ -73,12 +73,3 @@ body {
 * {
   box-sizing: border-box;
 }
-
-#theme-toggle.dragging {
-  cursor: grabbing;
-  transform: scale(1.04);
-}
-
-.singleLink a:hover svg {
-  fill: var(--svgHover);
-}
