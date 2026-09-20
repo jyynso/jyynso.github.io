@@ -12,12 +12,12 @@ const { href, title, svgPath, viewBox = "0 0 256 256" } = Astro.props;
 ---
 <Tooltip text={title}>
   <div
-    class="bg-transparent cursor-pointer px-2 transition-all duration-200 hover:-translate-y-0.5">
+    class="bg-transparent cursor-pointer px-1 transition-all duration-200 hover:-translate-y-0.5">
     <a href={href} target="_blank">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="26"
-        height="26"
+        width="20"
+        height="20"
         class="fill-muted hover:fill-accent"
         viewBox={viewBox}
         set:html={svgPath}

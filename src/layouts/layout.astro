@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
 ---
 <html lang="en">
   <head>
@@ -13,7 +14,8 @@ import Footer from '../components/Footer.astro';
 
   <body>
     <div class="flex flex-col items-center min-h-screen w-full relative z-10">
-      <div class="flex flex-col items-center gap-8 px-2 md:px-0">
+			<Header />
+      <div class="flex flex-col items-center gap-10 md:gap-8 px-2 md:px-0">
         <slot />
       </div>
       <Footer />
