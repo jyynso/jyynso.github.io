@@ -1,43 +1,43 @@
----
-import Seperator from "./Seperator.astro";
-import Tooltip from "./Tooltip.astro";
+	---
+	import Seperator from "./Seperator.astro";
+	import Tooltip from "./Tooltip.astro";
 
-interface Comp {
-	link: string;
-	name: string;
-	role: string;
-	startDate: string;
-	endDate: string;
-}
+	interface Comp {
+		link: string;
+		name: string;
+		role: string;
+		startDate: string;
+		endDate: string;
+	}
 
-const pssic: Comp = {
-	link: "https://pssic.ph/",
-	name: "PSSIC",
-	role: "IT Intern",
-	startDate: "Sep 2026",
-	endDate: "Present",
-};
+	const pssic: Comp = {
+		link: "https://pssic.ph/",
+		name: "PSSIC",
+		role: "Web Developer Intern",
+		startDate: "Sep 2026",
+		endDate: "Present",
+	};
 
-const companyList: Comp[] = [pssic];
----
-<div class="md:w-xl w-sm px-6 md:px-0 opacity-0 animate-fadeIn [animation-delay:0.7s]">
-  <h2 class="font-archivo text-base font-semibold">Work</h2> 
-	<Seperator class="my-2 md:mb-4"/>
-	{companyList.map(({ link, name, role, startDate, endDate }) => (
-		<a href={link} target="_blank" class="block">
-			<Tooltip text="visit site">
-				<div class="my-4 p-2 -m-2 flex flex-row justify-between items-center transition-all duration-200 group hover:-translate-y-0.5">
-					<div class="flex flex-row text-center gap-2">
+	const companyList: Comp[] = [pssic];
+	---
+	<div class="md:w-xl w-sm px-6 md:px-0 opacity-0 animate-fadeIn [animation-delay:0.7s]">
+		<h2 class="font-archivo text-base font-semibold">Work</h2> 
+		<Seperator class="my-2 md:mb-4"/>
+		{companyList.map(({ link, name, role, startDate, endDate }) => (
+			<a href={link} target="_blank" class="block">
+				<Tooltip text="visit site">
+					<div class="my-4 p-2 -m-2 flex flex-col gap-1 transition-all duration-200 group hover:-translate-y-0.5">
 						<h3 class="font-atkinson font-semibold text-muted group-hover:text-accent transition-colors duration-200">{role}</h3>
-						<span class="font-atkinson text-xtraMuted group-hover:text-accent transition-colors duration-200">@ {name}</span>
+						<div class="flex flex-row justify-between items-center text-sm font-atkinson text-xtraMuted gap-2">
+							<span class="group-hover:text-accent transition-colors duration-200">@ {name}</span>
+							<div class="flex flex-row gap-2">
+								<span class="group-hover:text-accent transition-colors duration-200">{startDate}</span>
+								-
+								<span class="group-hover:text-accent transition-colors duration-200">{endDate}</span>
+							</div>
+						</div>
 					</div>
-					<div class="flex flex-row text-center text-sm font-atkinson text-xtraMuted gap-2">
-						<span class="group-hover:text-accent transition-colors duration-200">{startDate}</span>
-						-
-						<span class="group-hover:text-accent transition-colors duration-200">{endDate}</span>
-					</div>
-				</div>
-			</Tooltip>
-		</a>
-	))}
-</div>
+				</Tooltip>
+			</a>
+		))}
+	</div>
