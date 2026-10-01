@@ -20,7 +20,7 @@ const { title, tags, description, link } = Astro.props;
 				</h3>
 				<div class="flex flex-row flex-wrap gap-x-2 justify-start md:justify-end md:max-w-[55%]">
 					{tags.map((tag) => (
-						<p class="font-plexMono text-xs text-xtraMuted group-hover:text-accent after:content-['·'] after:ml-2 last:after:content-none">
+						<p class="font-plexMono text-[11px] text-xtraMuted group-hover:text-accent after:content-['·'] after:ml-2 last:after:content-none">
 							{tag}
 						</p>
 					))}
