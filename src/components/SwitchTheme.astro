@@ -2,9 +2,9 @@
 ---
 
 <button
-	id="theme-toggle"
+	id="switchTheme"
 	class="w-6 h-6 grid place-items-center text-text cursor-pointer hover:[&_svg]:text-accent/70 transition-colors"
-	aria-label="Toggle theme"
+	aria-label="Switch Theme"
 >
 	<svg
 		class="icon icon-sun w-4.5 h-4.5 absolute"
@@ -50,7 +50,7 @@
 
 <script>
 	const toggle = document.getElementById(
-		"theme-toggle",
+		"switchTheme",
 	) as HTMLButtonElement | null;
 	const root = document.documentElement;
 	const storageKey = "theme";
