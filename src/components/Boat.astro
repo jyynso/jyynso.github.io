@@ -1,0 +1,261 @@
+---
+interface Props {
+  color?: string;
+  tick?: number;
+}
+
+const { color = "var(--boat-color, #000)", tick = 0.3 } = Astro.props;
+
+const PX = 3; 
+const H = 30; 
+
+const layers = [
+  { tile: 168, base: 9, amp: 3, phase: 0, opacity: 0.35, bottom: 14, scroll: 22, swell: 6.5, z: 1,
+    bands: [[12, 2], [15, 4], [18, 5], [H, 6]] },
+  { tile: 132, base: 12, amp: 3, phase: 1.3, opacity: 0.55, bottom: 7, scroll: 14, swell: 5, z: 2,
+    bands: [[15, 2], [18, 4], [21, 6], [24, 8], [H, 10]] },
+  { tile: 108, base: 15, amp: 3, phase: 2.4, opacity: 0.85, bottom: 0, scroll: 9, swell: 4, z: 5,
+    bands: [[18, 3], [21, 5], [24, 8], [27, 11], [H, 13]] },
+];
+
+type Layer = (typeof layers)[number];
+
+const BAYER = [
+  [0, 8, 2, 10],
+  [12, 4, 14, 6],
+  [3, 11, 1, 9],
+  [15, 7, 13, 5],
+];
+function ditherCells(level: number) {
+  const cells: [number, number][] = [];
+  BAYER.forEach((row, r) => row.forEach((v, c) => v < level && cells.push([c * PX, r * PX])));
+  return cells;
+}
+
+function crestPath(l: Layer) {
+  const n = l.tile / PX;
+  const ys = Array.from({ length: n }, (_, i) => {
+    const t = (i / n) * Math.PI * 2;
+    const v = Math.sin(t + l.phase) + 0.45 * Math.sin(2 * t + l.phase * 2);
+    return Math.round((l.base - l.amp * v) / PX) * PX;
+  });
+  let d = `M0 ${ys[0]}`;
+  for (let i = 0; i < n; i++) {
+    d += ` H${(i + 1) * PX}`;
+    if (i < n - 1) d += ` V${ys[i + 1]}`;
+  }
+  return d + ` V${H} H0 Z`;
+}
+
+const SCENE_H = 56;
+const SKY_ROWS = 19; 
+const meAndWho = [
+  "............#.....",
+  ".....#.....##.....",
+  ".....##....##.....",
+  "##...##....##...##",
+  "##################",
+  ".################.",
+  "...############...",
+  ".....########.....",
+];
+const BOAT_HULL_ROW = 3; 
+const BOAT_W = meAndWho[0].length * PX; 
+const BOAT_H = meAndWho.length * PX; 
+const BOAT_BOTTOM = 20; 
+const BOAT_TOP_ROW = (SCENE_H - BOAT_BOTTOM - BOAT_H) / PX; 
+
+function skyLevel(row: number) {
+  const hullRow = BOAT_TOP_ROW + BOAT_HULL_ROW;
+  if (row < hullRow) return 14;
+  return Math.max(1, Math.min(16, Math.round(9 + (row - hullRow) * 1.6)));
+}
+
+const boatClip = (() => {
+  let d = "";
+  meAndWho.forEach((line, r) => {
+    for (const m of line.matchAll(/#+/g)) {
+      const w = m[0].length * PX;
+      d += `M${(m.index ?? 0) * PX} ${r * PX}h${w}v${PX}h-${w}z`;
+    }
+  });
+  return `path('${d}')`;
+})();
+
+let skyPath = "";
+for (let r = 0; r < SKY_ROWS; r++) {
+  for (let c = 0; c < 4; c++) {
+    if (BAYER[r % 4][c] < skyLevel(r)) skyPath += `M${c * PX} ${r * PX}h2v2h-2z`;
+  }
+}
+const skySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${PX * 4}" height="${SKY_ROWS * PX}" shape-rendering="crispEdges"><path d="${skyPath}"/></svg>`;
+const skyUrl = `url('data:image/svg+xml,${encodeURIComponent(skySvg)}')`;
+---
+
+<div class="sea mt-26" aria-hidden="true" style={`--c: ${color}; --sky: ${skyUrl}; --sky-h: ${SKY_ROWS * PX}px; --boat-bottom: ${BOAT_BOTTOM}px; --boat-w: ${BOAT_W}px; --boat-h: ${BOAT_H}px; --boat-clip: ${boatClip};`}>
+  <div class="boat-drift" data-tick={tick}>
+    <div class="boat-bob">
+      <div class="boat" role="img" aria-label="A dithered rowboat"></div>
+    </div>
+  </div>
+
+  {layers.map((l, i) => {
+    let prev = 0;
+    return (
+      <svg
+        class="layer"
+        xmlns="http://www.w3.org/2000/svg"
+        shape-rendering="crispEdges"
+        style={`bottom:${l.bottom}px; z-index:${l.z}; opacity:${l.opacity}; --tile:${l.tile}px; --scroll:${l.scroll}s; --swell:${l.swell}s;`}
+      >
+        <defs>
+          {l.bands.map(([, level]) => (
+            <pattern id={`d${level}-${i}`} width={PX * 4} height={PX * 4} patternUnits="userSpaceOnUse">
+              {ditherCells(level).map(([x, y]) => <rect x={x} y={y} width="2" height="2" />)}
+            </pattern>
+          ))}
+          <clipPath id={`clip-${i}`}>
+            <path d={crestPath(l)} />
+          </clipPath>
+          <pattern id={`tile-${i}`} width={l.tile} height={H} patternUnits="userSpaceOnUse">
+            <g clip-path={`url(#clip-${i})`}>
+              {l.bands.map(([end, level]) => {
+                const y = prev;
+                prev = end;
+                return <rect y={y} width={l.tile} height={end - y} fill={`url(#d${level}-${i})`} />;
+              })}
+            </g>
+          </pattern>
+        </defs>
+        <rect
+          class="scroll"
+          width="6000"
+          height={H}
+          fill={`url(#tile-${i})`}
+          style={`animation-timing-function: steps(${l.tile / PX});`}
+        />
+      </svg>
+    );
+  })}
+</div>
+
+<style>
+  .sea {
+    --boat-top: calc(56px - var(--boat-bottom) - var(--boat-h));
+
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    height: 56px;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .layer {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    fill: var(--c);
+    overflow: hidden;
+    animation: swell var(--swell) steps(1, end) infinite;
+  }
+
+  .scroll {
+    will-change: transform;
+    animation: scroll var(--scroll) linear infinite;
+  }
+
+  @keyframes scroll {
+    to { transform: translateX(calc(var(--tile) * -1)); }
+  }
+
+  @keyframes swell {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(3px); }
+  }
+
+  .boat-drift {
+    position: absolute;
+    z-index: 3;
+    bottom: var(--boat-bottom);
+    left: 0;
+    width: var(--boat-w);
+    animation: drift var(--dur, 168s) steps(var(--steps, 560), end) infinite;
+  }
+
+  .boat-bob {
+    width: var(--boat-w);
+    height: var(--boat-h);
+    animation: bob 3.6s steps(1, end) infinite;
+  }
+
+  .boat {
+    width: var(--boat-w);
+    height: var(--boat-h);
+    background: var(--c);
+    -webkit-mask-image: var(--sky);
+    mask-image: var(--sky);
+    -webkit-mask-size: 12px var(--sky-h);
+    mask-size: 12px var(--sky-h);
+    -webkit-mask-repeat: repeat-x;
+    mask-repeat: repeat-x;
+    mask-position: var(--boat-w) calc(var(--boat-top) * -1);
+    clip-path: var(--boat-clip);
+    animation: unwind var(--dur, 168s) steps(var(--steps, 560), end) infinite;
+  }
+
+  @keyframes drift {
+    from { transform: translateX(calc(var(--boat-w) * -1)); }
+    to   { transform: translateX(var(--end, calc(100vw + var(--boat-w)))); }
+  }
+  @keyframes bob {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(3px); }
+  }
+
+  @keyframes unwind {
+    from { mask-position: var(--boat-w) calc(var(--boat-top) * -1); }
+    to   { mask-position: calc(var(--end, calc(100vw + var(--boat-w))) * -1) calc(var(--boat-top) * -1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .layer,
+    .scroll,
+    .boat-drift,
+    .boat-bob,
+    .boat {
+      animation: none;
+    }
+    .boat-drift {
+      transform: translateX(calc(50vw - var(--boat-w) / 2));
+    }
+    .boat {
+      mask-position: calc(var(--boat-w) / 2 - 50vw) calc(var(--boat-top) * -1);
+    }
+  }
+</style>
+
+<script>
+  //hop 3 steps
+  const STEP_PX = 3;
+
+  function syncBoats() {
+    document.querySelectorAll<HTMLElement>(".boat-drift").forEach((el) => {
+      const w = parseFloat(getComputedStyle(el).getPropertyValue("--boat-w")) || 42;
+      const steps = Math.ceil((window.innerWidth + w * 2) / STEP_PX);
+      const tick = parseFloat(el.dataset.tick ?? "0.3");
+      el.style.setProperty("--end", `${steps * STEP_PX - w}px`);
+      el.style.setProperty("--dur", `${(steps * tick).toFixed(2)}s`);
+      el.style.setProperty("--steps", String(steps));
+    });
+  }
+
+  let timer: number | undefined;
+  syncBoats();
+  window.addEventListener("resize", () => {
+    clearTimeout(timer);
+    timer = window.setTimeout(syncBoats, 200);
+  });
+</script>
