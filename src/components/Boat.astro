@@ -47,7 +47,7 @@ function crestPath(l: Layer) {
   return d + ` V${H} H0 Z`;
 }
 
-const SCENE_H = 56;
+const SCENE_H = 74;
 const SKY_ROWS = 19; 
 const meAndWho = [
   "............#.....",
@@ -90,9 +90,95 @@ for (let r = 0; r < SKY_ROWS; r++) {
 }
 const skySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${PX * 4}" height="${SKY_ROWS * PX}" shape-rendering="crispEdges"><path d="${skyPath}"/></svg>`;
 const skyUrl = `url('data:image/svg+xml,${encodeURIComponent(skySvg)}')`;
+
+function spritePath(rows: string[], ch: string, px = PX) {
+  let d = "";
+  rows.forEach((line, r) => {
+    for (const m of line.matchAll(new RegExp(`\\${ch}+`, "g"))) {
+      const w = m[0].length * px;
+      d += `M${(m.index ?? 0) * px} ${r * px}h${w}v${px}h-${w}z`;
+    }
+  });
+  return d;
+}
+
+const clouds = [
+  { rows: [
+      ".....####.......",
+      "..##########.##.",
+      "################",
+      "::::::::::::::::",
+    ], top: 3, tick: 0.7, opacity: 0.4, phase: 0.15 },
+  { rows: [
+      "...###.....",
+      ".#########.",
+      ":::::::::::",
+    ], top: 0, tick: 1.1, opacity: 0.25, phase: 0.55 },
+  { rows: [
+      "......####..........",
+      "..##############.###",
+      "::::::::::::::::::::",
+    ], top: 9, tick: 0.9, opacity: 0.3, phase: 0.85 },
+];
+
+const birdFrames = [
+  ["#...#", ".#.#.", "..#.."],
+  ["..#..", ".#.#.", "#...#"],
+];
+const BIRD_PX = 2;
+const BIRD_W = birdFrames[0][0].length * BIRD_PX;
+const BIRD_H = birdFrames[0].length * BIRD_PX;
+const birds = [
+  { top: 7, tick: 0.22, phase: 0.35, flap: 0.9 },
+  { top: 14, tick: 0.22, phase: 0.4, flap: 1.1 },
+  { top: 10, tick: 0.18, phase: 0.92, flap: 0.8 },
+];
 ---
 
-<div class="sea mt-26" aria-hidden="true" style={`--c: ${color}; --sky: ${skyUrl}; --sky-h: ${SKY_ROWS * PX}px; --boat-bottom: ${BOAT_BOTTOM}px; --boat-w: ${BOAT_W}px; --boat-h: ${BOAT_H}px; --boat-clip: ${boatClip};`}>
+<div class="sea mt-26" aria-hidden="true" style={`--c: ${color}; --scene-h: ${SCENE_H}px; --sky: ${skyUrl}; --sky-h: ${SKY_ROWS * PX}px; --boat-bottom: ${BOAT_BOTTOM}px; --boat-w: ${BOAT_W}px; --boat-h: ${BOAT_H}px; --boat-clip: ${boatClip};`}>
+  <div class="air">
+    {clouds.map((c, i) => {
+      const w = c.rows[0].length * PX;
+      const h = c.rows.length * PX;
+      return (
+        <div
+          class="air-drift"
+          data-tick={c.tick}
+          style={`--w:${w}px; --phase:${c.phase}; --rest:${Math.round(c.phase * 100)}vw; top:${c.top}px; opacity:${c.opacity};`}
+        >
+          <svg class="sprite" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" width={w} height={h}>
+            <defs>
+              <pattern id={`ca-${i}`} width={PX * 4} height={PX * 4} patternUnits="userSpaceOnUse">
+                {ditherCells(12).map(([x, y]) => <rect x={x} y={y} width="2" height="2" />)}
+              </pattern>
+              <pattern id={`cb-${i}`} width={PX * 4} height={PX * 4} patternUnits="userSpaceOnUse">
+                {ditherCells(6).map(([x, y]) => <rect x={x} y={y} width="2" height="2" />)}
+              </pattern>
+            </defs>
+            <path d={spritePath(c.rows, "#")} fill={`url(#ca-${i})`} />
+            <path d={spritePath(c.rows, ":")} fill={`url(#cb-${i})`} />
+          </svg>
+        </div>
+      );
+    })}
+
+    {birds.map((b) => (
+      <div
+        class="air-drift"
+        data-tick={b.tick}
+        style={`--w:${BIRD_W}px; --h:${BIRD_H}px; --phase:${b.phase}; --rest:${Math.round(b.phase * 100)}vw; --flap:${b.flap}s; top:${b.top}px; opacity:0.7;`}
+      >
+        <div class="flap">
+          {birdFrames.map((rows, f) => (
+            <svg class={f === 0 ? "f fa" : "f fb"} xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" width={BIRD_W} height={BIRD_H}>
+              <path d={spritePath(rows, "#", BIRD_PX)} />
+            </svg>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
   <div class="boat-drift" data-tick={tick}>
     <div class="boat-bob">
       <div class="boat" role="img" aria-label="A dithered rowboat"></div>
@@ -141,15 +227,69 @@ const skyUrl = `url('data:image/svg+xml,${encodeURIComponent(skySvg)}')`;
 
 <style>
   .sea {
-    --boat-top: calc(56px - var(--boat-bottom) - var(--boat-h));
+    --boat-top: calc(var(--scene-h) - var(--boat-bottom) - var(--boat-h));
 
     position: relative;
     width: 100vw;
     margin-left: calc(50% - 50vw);
-    height: 56px;
+    height: var(--scene-h);
     overflow: hidden;
     pointer-events: none;
     user-select: none;
+  }
+
+  .air {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    fill: var(--c);
+  }
+
+  .air-drift {
+    position: absolute;
+    left: 0;
+    animation: air var(--dur, 300s) steps(var(--steps, 500), end) infinite;
+    animation-delay: calc(var(--dur, 300s) * var(--phase, 0) * -1);
+  }
+
+  .sprite {
+    display: block;
+  }
+
+  .flap {
+    position: relative;
+    width: var(--w);
+    height: var(--h);
+  }
+
+  .f {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  .fa {
+    animation: flap-a var(--flap, 0.9s) steps(1, end) infinite;
+  }
+
+  .fb {
+    opacity: 0;
+    animation: flap-b var(--flap, 0.9s) steps(1, end) infinite;
+  }
+
+  @keyframes air {
+    from { transform: translateX(calc(var(--w) * -1)); }
+    to   { transform: translateX(var(--end, calc(100vw + var(--w)))); }
+  }
+
+  @keyframes flap-a {
+    0%   { opacity: 1; }
+    50%  { opacity: 0; }
+  }
+
+  @keyframes flap-b {
+    0%   { opacity: 0; }
+    50%  { opacity: 1; }
   }
 
   .layer {
@@ -225,8 +365,20 @@ const skyUrl = `url('data:image/svg+xml,${encodeURIComponent(skySvg)}')`;
     .scroll,
     .boat-drift,
     .boat-bob,
-    .boat {
+    .boat,
+    .air-drift,
+    .fa,
+    .fb {
       animation: none;
+    }
+    .air-drift {
+      transform: translateX(var(--rest));
+    }
+    .fa {
+      opacity: 1;
+    }
+    .fb {
+      display: none;
     }
     .boat-drift {
       transform: translateX(calc(50vw - var(--boat-w) / 2));
@@ -242,8 +394,9 @@ const skyUrl = `url('data:image/svg+xml,${encodeURIComponent(skySvg)}')`;
   const STEP_PX = 3;
 
   function syncBoats() {
-    document.querySelectorAll<HTMLElement>(".boat-drift").forEach((el) => {
-      const w = parseFloat(getComputedStyle(el).getPropertyValue("--boat-w")) || 42;
+    document.querySelectorAll<HTMLElement>(".boat-drift, .air-drift").forEach((el) => {
+      const cs = getComputedStyle(el);
+      const w = parseFloat(cs.getPropertyValue("--w")) || parseFloat(cs.getPropertyValue("--boat-w")) || 42;
       const steps = Math.ceil((window.innerWidth + w * 2) / STEP_PX);
       const tick = parseFloat(el.dataset.tick ?? "0.3");
       el.style.setProperty("--end", `${steps * STEP_PX - w}px`);
